@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить ссылку</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>➕ Добавить ссылку</h1>
+        
+        <form id="linkForm">
+            <div class="form-group">
+                <label for="category">📁 Категория</label>
+                <select id="category" required>
+                    <option value="">Загрузка...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">🔗 Название ссылки</label>
+                <input type="text" id="name" placeholder="Например: Лучший кэшбэк" required maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="url">🌐 URL ссылки</label>
+                <input type="url" id="url" placeholder="https://example.com/ref?id=123" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">📝 Описание (необязательно)</label>
+                <textarea id="description" placeholder="Краткое описание ссылки" maxlength="500" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Отправить на модерацию</button>
+        </form>
+
+        <div id="success" class="success-message" style="display: none;">
+            <h2>✅ Ссылка отправлена!</h2>
+            <p>Ожидай одобрения администратора. Мы уведомим тебя о результате.</p>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;">
+            <h2>❌ Ошибка</h2>
+            <p id="errorText"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
