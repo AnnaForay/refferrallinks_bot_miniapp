@@ -5,6 +5,7 @@ tg.expand();
 // Данные пользователя
 const user = tg.initDataUnsafe?.user;
 const userId = user?.id;
+const initData = tg.initData;
 
 // Элементы формы
 const form = document.getElementById('linkForm');
@@ -19,34 +20,54 @@ const errorText = document.getElementById('errorText');
 // Загрузка категорий при открытии
 async function loadCategories() {
     try {
-        // Запрашиваем категории через initData (безопасно)
-        const categories = await fetchCategories();
+        // Получаем категории через Telegram Bot API
+        const categories = await fetchCategoriesFromBot();
         
-        categorySelect.innerHTML = '<option value="">Выбери категорию</option>';
+        categorySelect.innerHTML = '';
         
-        categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat.id;
-            option.textContent = `${cat.emoji} ${cat.name}`;
-            categorySelect.appendChild(option);
-        });
+        // Добавляем реальные категории
+        if (categories && categories.length > 0) {
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = `${cat.emoji} ${cat.name}`;
+                categorySelect.appendChild(option);
+            });
+        }
+        
+        // ВСЕГДА добавляем "Затрудняюсь в выборе" последней строкой
+        const undecidedOption = document.createElement('option');
+        undecidedOption.value = 0;
+        undecidedOption.textContent = '❓ Затрудняюсь в выборе';
+        categorySelect.appendChild(undecidedOption);
+        
     } catch (error) {
         console.error('Ошибка загрузки категорий:', error);
-        showError('Не удалось загрузить категории. Попробуй позже.');
+        
+        // Если не удалось загрузить, показываем только "Затрудняюсь"
+        categorySelect.innerHTML = '';
+        const undecidedOption = document.createElement('option');
+        undecidedOption.value = 0;
+        undecidedOption.textContent = '❓ Затрудняюсь в выборе';
+        categorySelect.appendChild(undecidedOption);
     }
 }
 
-// Функция получения категорий из бота
-async function fetchCategories() {
-    // Здесь будет запрос к боту через Telegram Bot API
-    // Пока что возвращаем тестовые данные
-    // После настройки бэкенда заменишь на реальный запрос
-    
-    return [
-        { id: 1, emoji: '💰', name: 'Финансы' },
-        { id: 2, emoji: '🎮', name: 'Игры' },
-        { id: 3, emoji: '🛍️', name: 'Шоппинг' }
-    ];
+// Функция получения категорий через WebApp
+async function fetchCategoriesFromBot() {
+    try {
+        // Используем CloudStorage для временного хранения или запрос через initData
+        // Простой вариант: отправляем запрос боту через специальную команду
+        
+        // Пока возвращаем пустой массив - категории загрузятся при первом использовании
+        // После того как бот настроим, здесь будет реальный запрос
+        
+        return [];
+        
+    } catch (error) {
+        console.error('Ошибка запроса категорий:', error);
+        return [];
+    }
 }
 
 // Отправка формы
@@ -83,7 +104,7 @@ form.addEventListener('submit', async (e) => {
     const linkData = {
         action: 'submit_link',
         user_id: userId,
-        category_id: parseInt(categorySelect.value),
+        category_id: parseInt(categorySelect.value) || 0,
         name: nameInput.value.trim(),
         url: urlInput.value.trim(),
         description: descriptionInput.value.trim() || null
@@ -129,10 +150,4 @@ loadCategories();
 tg.BackButton.show();
 tg.BackButton.onClick(() => {
     tg.close();
-});
-
-// Настройка главной кнопки (необязательно, можно использовать обычную кнопку формы)
-tg.MainButton.setText('Отправить на модерацию');
-tg.MainButton.onClick(() => {
-    form.requestSubmit();
 });
