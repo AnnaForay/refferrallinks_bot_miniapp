@@ -2,6 +2,8 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
+const API_URL = 'http://localhost:5000';
+
 // Данные пользователя
 const user = tg.initDataUnsafe?.user;
 const userId = user?.id;
@@ -20,12 +22,13 @@ const errorText = document.getElementById('errorText');
 // Загрузка категорий при открытии
 async function loadCategories() {
     try {
-        // Получаем категории через Telegram Bot API
-        const categories = await fetchCategoriesFromBot();
+        // Запрос к Flask API за категориями
+        const response = await fetch(`${API_URL}/api/categories`);
+        const categories = await response.json();
         
         categorySelect.innerHTML = '';
         
-        // Добавляем реальные категории
+        // Добавляем категории из API
         if (categories && categories.length > 0) {
             categories.forEach(cat => {
                 const option = document.createElement('option');
@@ -35,7 +38,7 @@ async function loadCategories() {
             });
         }
         
-        // ВСЕГДА добавляем "Затрудняюсь в выборе" последней строкой
+        // ВСЕГДА добавляем "Затрудняюсь в выборе"
         const undecidedOption = document.createElement('option');
         undecidedOption.value = 0;
         undecidedOption.textContent = '❓ Затрудняюсь в выборе';
@@ -151,3 +154,4 @@ tg.BackButton.show();
 tg.BackButton.onClick(() => {
     tg.close();
 });
+
