@@ -2,7 +2,7 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://refferrallinks-bot-miniapp.onrender.com';
 
 // Данные пользователя
 const user = tg.initDataUnsafe?.user;
@@ -154,4 +154,5 @@ tg.BackButton.show();
 tg.BackButton.onClick(() => {
     tg.close();
 });
+
 
