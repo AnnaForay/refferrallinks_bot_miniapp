@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить категорию</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>➕ Добавить категорию</h1>
+        
+        <form id="categoryForm">
+            <div class="form-group">
+                <label for="name">📝 Название категории</label>
+                <input type="text" id="name" placeholder="Например: Финансы" required maxlength="50">
+            </div>
+
+            <div class="form-group">
+                <label for="emoji">🎨 Эмодзи категории</label>
+                <input type="text" id="emoji" placeholder="💰" required maxlength="10">
+                <small>Один эмодзи для отображения категории</small>
+            </div>
+
+            <button type="submit" class="btn-submit">Добавить категорию</button>
+        </form>
+
+        <div id="success" class="success-message" style="display: none;">
+            <h2>✅ Категория добавлена!</h2>
+            <p>Новая категория успешно создана и доступна всем пользователям.</p>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;">
+            <h2>❌ Ошибка</h2>
+            <p id="errorText"></p>
+        </div>
+    </div>
+
+    <script src="script-category.js"></script>
+</body>
+</html>
